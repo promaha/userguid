@@ -1,0 +1,1588 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NLT ERP User Guide</title>
+    <style>
+      /* CSS Variables for brand colors */
+      :root {
+        --primary-color: #008f3e; /* Main theme color */
+        --secondary-color: #00642e; /* Darker theme color */
+        --text-color: #333; /* Default text color */
+        --bg-color: #f9f9f9; /* Light background */
+        --white: #fff; /* White for contrasts */
+        --shadow-color: rgba(0, 0, 0, 0.1); /* For professional shadows */
+      }
+
+      /* Reset and base styles for clean, modern design */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth; /* Smooth scrolling for navigation */
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Helvetica, "Noto Sans Arabic", sans-serif; /* Support Arabic */
+        line-height: 1.6;
+        color: var(--text-color);
+        background-color: var(--bg-color);
+        padding-top: 60px; /* Adjusted for fixed header height */
+      }
+
+      body[lang="ar"] {
+        direction: rtl; /* Right-to-left for Arabic */
+      }
+
+      body[lang="en"] {
+        direction: ltr; /* Left-to-right for English */
+      }
+
+      /* Header styles - fixed at the top with centered content, fixed height */
+      header {
+        background-color: var(--secondary-color);
+        color: var(--white);
+        padding: 0; /* Remove padding, height controlled by fixed height */
+        height: 60px; /* Fixed header height */
+        box-shadow: 0 2px 4px var(--shadow-color); /* Professional shadow */
+        position: fixed; /* Fix header at the top */
+        top: 0;
+        width: 100%;
+        z-index: 1000; /* Ensure it stays above other content */
+        overflow: hidden; /* Prevent content overflow */
+      }
+
+      /* Container for header content to enforce max-width and margins */
+      .header-container {
+        max-width: 1200px; /* Match main content width */
+        margin: 0 auto; /* Center the container */
+        padding: 0 1rem; /* Reduced padding for consistent spacing */
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: nowrap; /* Prevent wrapping to keep single row */
+      }
+
+      /* Language switcher positioning */
+      body[lang="en"] .language-switcher {
+        order: 3; /* Place last in LTR (right side) */
+      }
+
+      body[lang="ar"] .language-switcher {
+        order: 1; /* Place first in RTL (left side) */
+      }
+
+      .header-logo {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem; /* Reduced gap */
+        flex: 0 0 auto; /* Prevent stretching */
+        order: 1; /* First in LTR, last in RTL */
+      }
+
+      body[lang="ar"] .header-logo {
+        order: 3; /* Last in RTL */
+      }
+
+      .header-logo img {
+        width: 50px; /* Reduced logo size */
+        height: 50px;
+        object-fit: contain; /* Preserve logo quality */
+        transition: transform 0.3s ease; /* Animation on hover */
+      }
+
+      .header-logo img:hover {
+        transform: scale(1.1); /* Slight zoom on hover */
+      }
+
+      .header-logo h1 {
+        margin: 0;
+        font-size: 1rem; /* Further reduced font size for header title */
+      }
+
+      /* Language switcher */
+      .language-switcher {
+        display: none; /* Hide language switcher temporarily */
+        gap: 1rem;
+        flex: 0 0 auto; /* Prevent stretching */
+      }
+
+      .language-switcher button {
+        background: none;
+        border: none;
+        color: var(--white);
+        font-size: 0.8rem; /* Further reduced font size */
+        cursor: pointer;
+        padding: 0.4rem 0.8rem;
+        border-radius: 4px;
+        transition: background-color 0.3s ease;
+      }
+
+      .language-switcher button:hover {
+        background-color: var(--primary-color);
+      }
+
+      /* Navigation menu */
+      nav {
+        flex: 0 0 auto; /* Prevent stretching */
+        order: 2; /* Middle in both LTR and RTL */
+      }
+
+      nav ul {
+        list-style: none;
+        display: flex;
+        gap: 0.1rem; /* Further reduced gap between nav items */
+      }
+
+      nav a {
+        color: var(--white);
+        text-decoration: none;
+        padding: 0.5rem 1rem; /* Reduced padding */
+        border-radius: 6px;
+        transition: color 0.3s ease, transform 0.3s ease; /* Smooth transition */
+        display: flex;
+        align-items: center;
+        gap: 0.4rem; /* Reduced space for icons */
+        font-family: "Arial Black", Gadget, sans-serif; /* Professional font */
+        font-size: 0.7rem; /* Further reduced font size */
+      }
+
+      nav a::after {
+        content: "▶"; /* Professional arrow (right) */
+        font-size: 0.7rem; /* Match nav font size */
+        margin-left: 0.4rem;
+        transition: transform 0.3s ease;
+      }
+
+      body[lang="ar"] nav a::after {
+        content: "◀"; /* Professional arrow (left) for Arabic */
+      }
+
+      nav a:hover {
+        color: var(--primary-color);
+        transform: translateY(-2px) scale(1.05); /* Lift and slight scale */
+      }
+
+      /* Hamburger menu button */
+      .hamburger {
+        display: none; /* Hidden by default */
+        background: none;
+        border: none;
+        color: var(--white);
+        font-size: 1.1rem; /* Further reduced font size */
+        cursor: pointer;
+        padding: 0.4rem;
+        order: 2; /* Middle in LTR and RTL */
+      }
+
+      .hamburger:hover {
+        color: var(--primary-color);
+      }
+
+      /* Sidebar styles */
+      .sidebar {
+        position: fixed;
+        top: 0;
+        width: 250px;
+        height: 100%;
+        background-color: var(--secondary-color);
+        color: var(--white);
+        transform: translateX(-100%); /* Hidden off-screen (left in LTR) */
+        transition: transform 0.3s ease-in-out;
+        z-index: 2000; /* Above header */
+        padding: 2rem 1rem;
+      }
+
+      body[lang="ar"] .sidebar {
+        transform: translateX(100%); /* Hidden off-screen (right in RTL) */
+      }
+
+      .sidebar.open {
+        transform: translateX(0); /* Slide in */
+      }
+
+      .sidebar ul {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .sidebar a {
+        color: var(--white);
+        text-decoration: none;
+        padding: 0.75rem 1rem;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-family: "Arial Black", Gadget, sans-serif;
+        font-size: 0.8rem; /* Further reduced font size */
+      }
+
+      .sidebar a:hover {
+        color: var(--primary-color);
+        background-color: rgba(255, 255, 255, 0.1);
+      }
+
+      /* Close button for sidebar */
+      .close-sidebar {
+        background: none;
+        border: none;
+        color: var(--white);
+        font-size: 1.1rem; /* Further reduced font size */
+        cursor: pointer;
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+      }
+
+      body[lang="ar"] .close-sidebar {
+        right: auto;
+        left: 1rem;
+      }
+
+      .close-sidebar:hover {
+        color: var(--primary-color);
+      }
+
+      /* Overlay for closing sidebar when clicking outside */
+      .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 1500; /* Below sidebar, above header */
+        display: none;
+      }
+
+      .overlay.active {
+        display: block;
+      }
+
+      /* Main content */
+      main {
+        max-width: 1200px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+      }
+
+      section {
+        margin-bottom: 3rem;
+        padding: 2rem;
+        background-color: var(--white);
+        border-radius: 8px;
+        box-shadow: 0 4px 8px var(--shadow-color); /* Professional card-like sections */
+        opacity: 0;
+        animation: fadeIn 0.8s ease-in forwards; /* Fade-in animation */
+        transition: transform 0.3s ease, box-shadow 0.3s ease; /* Hover animation */
+      }
+
+      section:hover {
+        transform: translateY(-5px); /* Lift on hover */
+        box-shadow: 0 8px 16px var(--shadow-color); /* Deeper shadow on hover */
+      }
+
+      /* Keyframes for fade-in animation */
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Delay animations for sequential load */
+      #home {
+        animation-delay: 0.2s;
+      }
+      #hr-1 {
+        animation-delay: 0.4s;
+      }
+      #hr-2 {
+        animation-delay: 0.6s;
+      }
+      #hr-3 {
+        animation-delay: 0.8s;
+      }
+      #hr-4 {
+        animation-delay: 1s;
+      }
+      #hr-5 {
+        animation-delay: 1.2s;
+      }
+      #hr-6 {
+        animation-delay: 1.4s;
+      }
+      #hr-7 {
+        animation-delay: 1.6s;
+      }
+      #hr-8 {
+        animation-delay: 1.8s;
+      }
+      #hr-9 {
+        animation-delay: 2s;
+      }
+      #hr-10 {
+        animation-delay: 2.2s;
+      }
+      #hr-11 {
+        animation-delay: 2.4s;
+      }
+      #maintenance-1 {
+        animation-delay: 2.6s;
+      }
+      #maintenance-2 {
+        animation-delay: 2.8s;
+      }
+
+      section h2 {
+        color: var(--secondary-color);
+        margin-bottom: 1.5rem;
+        font-size: 1.8rem;
+        cursor: pointer; /* Make title clickable */
+        transition: color 0.3s ease; /* Smooth color transition */
+        position: relative; /* For adding an arrow indicator */
+      }
+
+      section h2::after {
+        content: "▼";
+        position: absolute;
+        right: 10px;
+        font-size: 1rem;
+        transition: transform 0.3s ease;
+      }
+
+      body[lang="ar"] section h2::after {
+        right: auto;
+        left: 10px;
+      }
+
+      section h2.open::after {
+        transform: rotate(180deg); /* Rotate arrow when open */
+      }
+
+      section h2:hover {
+        color: var(--primary-color); /* Change color on hover */
+      }
+
+      /* Styling for the new steps title */
+      .steps-title {
+        font-family: "Arial Black", Gadget, sans-serif; /* Distinct, bold font */
+        color: var(--primary-color); /* Use primary color for distinction */
+        font-size: 1.4rem; /* Slightly smaller than h2 but prominent */
+        margin-bottom: 1rem; /* Space below title */
+        font-weight: bold; /* Ensure boldness */
+      }
+
+      body[lang="ar"] .steps-title {
+        text-align: right; /* Align right for Arabic */
+      }
+
+      /* Module content layout: image left, steps right */
+      .module-content {
+        display: flex;
+        gap: 2rem;
+        align-items: flex-start;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out; /* Smooth animation */
+        opacity: 0;
+      }
+
+      .module-content.open {
+        max-height: 2000px; /* Large enough to accommodate content */
+        opacity: 1;
+      }
+
+      /* Additional images - moved to the right */
+      .additional-images {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1.5rem;
+        justify-content: flex-end; /* Align to the right */
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out; /* Smooth animation */
+        opacity: 0;
+      }
+
+      body[lang="ar"] .additional-images {
+        justify-content: flex-start; /* Align to the left for Arabic */
+        flex-direction: row-reverse; /* Ensure left alignment with RTL */
+      }
+
+      .additional-images.open {
+        max-height: 200px; /* Adjust based on content */
+        opacity: 1;
+      }
+
+      /* Image styles - controlled size with max dimensions */
+      img.module-img {
+        max-width: 600px; /* Specific max width */
+        max-height: 400px; /* Specific max height */
+        height: auto; /* Maintain aspect ratio */
+        width: auto; /* Maintain aspect ratio */
+        object-fit: contain; /* Preserve shape and quality without cropping */
+        border: 1px solid var(--primary-color); /* Brand color border */
+        border-radius: 8px;
+        box-shadow: 0 2px 4px var(--shadow-color);
+        flex: 1;
+        transition: transform 0.3s ease; /* Animation on image hover */
+      }
+
+      img.module-img:hover {
+        transform: scale(1.05); /* Slight zoom on hover */
+      }
+
+      /* Step-by-step guides */
+      ol {
+        flex: 1;
+        padding-left: 1.5rem;
+        list-style-type: decimal;
+      }
+
+      body[lang="ar"] ol {
+        padding-left: 0;
+        padding-right: 1.5rem;
+        list-style-type: arabic-indic; /* Arabic numbers for lists */
+      }
+
+      ol li {
+        margin-bottom: 0.75rem;
+        font-size: 1.5rem;
+        line-height: 1.4;
+      }
+
+      .steps-container p {
+        margin-bottom: 0.75rem;
+        font-size: 1.5rem;
+        line-height: 1.4;
+      }
+
+      .additional-images img {
+        width: 80px; /* Increased size */
+        height: 80px; /* Increased size */
+        object-fit: contain; /* Preserve shape and quality */
+        transition: transform 0.3s ease;
+      }
+
+      .additional-images img:hover {
+        transform: scale(1.1); /* Slight zoom on hover */
+      }
+
+      /* Visible and smooth division between sections - thicker line */
+      section:not(:last-child)::after {
+        content: "";
+        display: block;
+        width: 100%;
+        height: 2px; /* Thicker line */
+        background: linear-gradient(
+          to right,
+          transparent,
+          var(--primary-color),
+          transparent
+        ); /* Smooth gradient divider */
+        margin-top: 3rem;
+      }
+
+      /* Footer */
+      footer {
+        background-color: var(--secondary-color);
+        color: var(--white);
+        padding: 0.5rem; /* Reduced padding */
+        height: 60px; /* Match header height */
+        position: relative;
+        bottom: 0;
+        width: 100%;
+        box-shadow: 0 -2px 4px var(--shadow-color);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      body[lang="ar"] footer {
+        flex-direction: row-reverse; /* Reverse for RTL */
+      }
+
+      footer p {
+        margin: 0;
+        flex: 1;
+        text-align: center; /* Center the text */
+        font-size: 0.9rem; /* Slightly smaller font */
+      }
+
+      /* Download PDF button */
+      .download-pdf {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem; /* Smaller padding */
+        background-color: var(--primary-color);
+        color: var(--white);
+        text-decoration: underline; /* Style as link */
+        border-radius: 6px;
+        font-family: "Arial Black", Gadget, sans-serif;
+        font-size: 0.8rem; /* Smaller font size */
+        transition: background-color 0.3s ease, transform 0.3s ease;
+      }
+
+      .download-pdf:hover {
+        background-color: var(--secondary-color);
+        transform: translateY(-2px);
+      }
+
+      .download-pdf::after {
+        content: "⬇"; /* Download icon */
+        font-size: 0.8rem; /* Match font size */
+      }
+
+      body[lang="ar"] .download-pdf::after {
+        content: "⬇"; /* Same icon for RTL */
+        margin-right: 0.5rem;
+      }
+
+      /* Responsive design - mobile-friendly adjustments */
+      @media (max-width: 768px) {
+        .header-container {
+          flex-direction: row; /* Keep row for logo and hamburger */
+          align-items: center;
+          padding: 0 0.8rem; /* Further reduced padding */
+        }
+
+        .header-logo {
+          justify-content: center;
+          margin-bottom: 0; /* Remove margin for alignment */
+        }
+
+        nav {
+          display: none; /* Hide navigation titles on mobile */
+        }
+
+        .hamburger {
+          display: block; /* Show hamburger icon on mobile */
+        }
+
+        .language-switcher {
+          margin-top: 0; /* Remove margin on mobile */
+          order: 3; /* Last in row */
+        }
+
+        main {
+          padding: 0 0.5rem; /* Reduce padding on smaller screens */
+        }
+
+        section h2 {
+          font-size: 1.5rem; /* Adjust heading size */
+        }
+
+        .module-content {
+          flex-direction: column; /* Stack image and steps on mobile */
+        }
+
+        img.module-img {
+          margin-bottom: 1.5rem;
+          max-width: 100%; /* Full width on mobile */
+          max-height: 300px; /* Adjust max height for mobile */
+        }
+
+        .additional-images {
+          justify-content: center; /* Center additional images on mobile */
+        }
+
+        .steps-title {
+          font-size: 1.2rem; /* Slightly smaller on mobile */
+        }
+
+        footer {
+          flex-direction: column; /* Stack footer items on mobile */
+          gap: 0.5rem;
+          height: auto; /* Allow flexible height on mobile */
+        }
+
+        .download-pdf {
+          margin: 0; /* Remove margin for mobile */
+        }
+      }
+    </style>
+  </head>
+  <body lang="en">
+    <!-- Header with logo, hamburger, and language switcher -->
+    <header>
+      <div class="header-container">
+        <div class="header-logo">
+          <img src="img/logo_white.png" alt="NLT ERP Logo" />
+          <h1>Workbench ERP User Guide</h1>
+        </div>
+        <!-- Hamburger menu button -->
+        <button class="hamburger" onclick="toggleSidebar()">☰</button>
+        <!-- Navigation menu (hidden on mobile) -->
+        <nav>
+          <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#hr-1">Human Resource</a></li>
+            <li><a href="#maintenance-1">Maintenance</a></li>
+            <li><a href="#task-1">Task Management</a></li>
+            <li><a href="#nltapp-1">NLT App</a></li>
+          </ul>
+        </nav>
+        <!-- Single language switcher button -->
+        <div class="language-switcher">
+          <button id="language-toggle" onclick="toggleLanguage()">
+            English
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Sidebar for mobile navigation -->
+    <div class="sidebar" id="sidebar">
+      <button class="close-sidebar" onclick="toggleSidebar()">✕</button>
+      <ul>
+        <li><a href="#home" onclick="toggleSidebar()">Home</a></li>
+        <li><a href="#hr-1" onclick="toggleSidebar()">Human Resource</a></li>
+        <li>
+          <a href="#maintenance-1" onclick="toggleSidebar()">Maintenance</a>
+        </li>
+        <li>
+          <a href="#task-1" onclick="toggleSidebar()">Task Management</a>
+        </li>
+        <li>
+          <a href="#nltapp-1" onclick="toggleSidebar()">NLT App</a>
+        </li>
+      </ul>
+    </div>
+    <!-- Overlay for closing sidebar -->
+    <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+
+    <!-- Main content area -->
+    <main id="main-content">
+      <!-- Sections will be dynamically generated here -->
+    </main>
+
+    <!-- Footer with company name and download button -->
+    <footer>
+      <p>NLT © 2025</p>
+      <a href="pdf/App_Guider_Branch_Manager.pdf" class="download-pdf" download
+        >Download PDF</a
+      >
+    </footer>
+
+    <!-- JavaScript for controlling open/close animation, language switching, and sidebar -->
+    <script>
+      // Language data (empty for future translations)
+      const translations = {
+        en: {
+          "language-toggle": "",
+        },
+        ar: {
+          "language-toggle": "",
+        },
+      };
+
+      // Section data for dynamic generation
+      const sectionsData = [
+        {
+          id: "home",
+          title: "Welcome to NLT ERP",
+          type: "simple",
+          content:
+            "NLT Workbench ERP is a comprehensive Enterprise Resource Planning system designed to streamline business operations, integrate various departments such as inventory, sales, and HR, and enhance overall efficiency. This user guide will walk you through the key modules to help you get started and make the most of the system.",
+        },
+        {
+          id: "hr-1",
+          title: "Human Resource",
+          stepsTitle: "Log In:",
+          image: "img/hr/hr1.png",
+          imageAlt: "Screenshot of HR Management module",
+          steps: [{ text: "Log in using a manager user.", type: "ordered" }],
+          additionalImages: [
+            { src: "img/NLT_Logo.png", alt: "Additional Icon 1" },
+            { src: "img/logo_green.png", alt: "Additional Icon 2" },
+          ],
+        },
+        {
+          id: "hr-2",
+          title: "Human Resource",
+          stepsTitle: "Creating Employees:",
+          image: "img/hr/hr2.png",
+          imageAlt: "Screenshot of HR Management module",
+          steps: [
+            { text: "Go to Human Resource.", type: "ordered" },
+            { text: "Click on Employees", type: "ordered" },
+            { text: "Click on New Employees", type: "ordered" },
+          ],
+          additionalImages: [
+            { src: "img/NLT_Logo.png", alt: "Additional Icon 1" },
+            { src: "img/logo_green.png", alt: "Additional Icon 2" },
+          ],
+        },
+        {
+          id: "hr-3",
+          title: "Human Resource",
+          stepsTitle: "Creating Employees:",
+          image: "img/hr/hr3.png",
+          imageAlt: "Screenshot of HR Management module",
+          steps: [
+            {
+              text: "In this first section, add the personal information of the employee:",
+              type: "ordered",
+            },
+            {
+              text: "name, email, phone number, gender, supposed working hours, nationality, address, image, job and branch.",
+              type: "text",
+            },
+          ],
+          additionalImages: [
+            { src: "img/NLT_Logo.png", alt: "Additional Icon 1" },
+            { src: "img/logo_green.png", alt: "Additional Icon 2" },
+          ],
+        },
+        {
+          id: "hr-4",
+          title: "Human Resource",
+          stepsTitle: "Creating Employees:",
+          image: "img/hr/hr4.png",
+          imageAlt: "Screenshot of HR Management module",
+          steps: [
+            {
+              text: "In this second section, attach the files of the employee.",
+              type: "ordered",
+            },
+            {
+              text: "For example, CV, IC/Passport, Visa, Food Handling Certificate, etc.",
+              type: "text",
+            },
+          ],
+          additionalImages: [
+            { src: "img/NLT_Logo.png", alt: "Additional Icon 1" },
+            { src: "img/logo_green.png", alt: "Additional Icon 2" },
+          ],
+        },
+        {
+          id: "hr-5",
+          title: "Human Resource",
+          stepsTitle: "Creating Employees:",
+          image: "img/hr/hr5.png",
+          imageAlt: "Screenshot of HR Management module",
+          steps: [
+            {
+              text: "The third section is for the financial information.",
+              type: "ordered",
+            },
+            {
+              text: "For example, salary, bank info, custom allowances or deductions.",
+              type: "text",
+            },
+            {
+              text: "Then click Create in the bottom of the page.",
+              type: "ordered",
+            },
+          ],
+          additionalImages: [
+            { src: "img/NLT_Logo.png", alt: "Additional Icon 1" },
+            { src: "img/logo_green.png", alt: "Additional Icon 2" },
+          ],
+        },
+        {
+          id: "hr-6",
+          title: "Human Resource",
+          stepsTitle: "Creating Work Shift:",
+          image: "img/hr/hr6.png",
+          imageAlt: "Screenshot of HR Management module",
+          steps: [
+            { text: "Go to attendance management.", type: "ordered" },
+            { text: "Go to work shifts.", type: "ordered" },
+            { text: "Click on new work shift.", type: "ordered" },
+          ],
+          additionalImages: [
+            { src: "img/NLT_Logo.png", alt: "Additional Icon 1" },
+            { src: "img/logo_green.png", alt: "Additional Icon 2" },
+          ],
+        },
+        {
+          id: "hr-7",
+          title: "Human Resource",
+          stepsTitle: "Creating Work Shift:",
+          image: "img/hr/hr7.png",
+          imageAlt: "Screenshot of HR Management module",
+          steps: [
+            { text: "Type the name of the shift.", type: "ordered" },
+            { text: "Select the branch.", type: "ordered" },
+            { text: "Type description.", type: "ordered" },
+            { text: "Select the start & end time.", type: "ordered" },
+            { text: "Click create.", type: "ordered" },
+          ],
+          additionalImages: [
+            { src: "img/NLT_Logo.png", alt: "Additional Icon 1" },
+            { src: "img/logo_green.png", alt: "Additional Icon 2" },
+          ],
+        },
+        {
+          id: "hr-8",
+          title: "Human Resource",
+          stepsTitle: "Adding Shift Work for Employees:",
+          image: "img/hr/hr8.png",
+          imageAlt: "Screenshot of HR Management module",
+          steps: [
+            { text: "Go to Human Resource.", type: "ordered" },
+            { text: "Click on Employees.", type: "ordered" },
+            { text: "Select the Employee and click on edit.", type: "ordered" },
+          ],
+          additionalImages: [
+            { src: "img/NLT_Logo.png", alt: "Additional Icon 1" },
+            { src: "img/logo_green.png", alt: "Additional Icon 2" },
+          ],
+        },
+        {
+          id: "hr-9",
+          title: "Human Resource",
+          stepsTitle: "Adding Shift Work for Employees:",
+          image: "img/hr/hr9.png",
+          imageAlt: "Screenshot of HR Management module",
+          steps: [
+            {
+              text: "Scroll down to the end of page then click on Add Shifts.",
+              type: "ordered",
+            },
+          ],
+          additionalImages: [
+            { src: "img/NLT_Logo.png", alt: "Additional Icon 1" },
+            { src: "img/logo_green.png", alt: "Additional Icon 2" },
+          ],
+        },
+        {
+          id: "hr-10",
+          title: "Human Resource",
+          stepsTitle: "Adding Shift Work for Employees:",
+          image: "img/hr/hr10.png",
+          imageAlt: "Screenshot of HR Management module",
+          steps: [
+            { text: "Choose the period duration.", type: "ordered" },
+            { text: "Choose the shift work.", type: "ordered" },
+            { text: "Select the days.", type: "ordered" },
+            { text: "Submit.", type: "ordered" },
+            {
+              text: "You can choose more than one work shift, as long as the times do not conflict.",
+              type: "text",
+            },
+          ],
+          additionalImages: [
+            { src: "img/NLT_Logo.png", alt: "Additional Icon 1" },
+            { src: "img/logo_green.png", alt: "Additional Icon 2" },
+          ],
+        },
+        {
+          id: "hr-11",
+          title: "Human Resource",
+          stepsTitle: "Employee Attendance Report:",
+          image: "img/hr/hr11.png",
+          imageAlt: "Screenshot of HR Management module",
+          steps: [
+            { text: "Go to attendance reports.", type: "ordered" },
+            { text: "Go to attendance by employee.", type: "ordered" },
+            { text: "Select the employee.", type: "ordered" },
+            { text: "Choose the date.", type: "ordered" },
+          ],
+          additionalImages: [
+            { src: "img/NLT_Logo.png", alt: "Additional Icon 1" },
+            { src: "img/logo_green.png", alt: "Additional Icon 2" },
+          ],
+        },
+        {
+          id: "hr-12",
+          title: "Human Resource",
+          stepsTitle: "Branch Attendance Report:",
+          image: "img/hr/hr12.png",
+          imageAlt: "Screenshot of HR Management module",
+          steps: [
+            { text: "Go to attendance reports.", type: "ordered" },
+            { text: "Go to attendance by branch.", type: "ordered" },
+            { text: "Select the branch.", type: "ordered" },
+            { text: "Choose the day.", type: "ordered" },
+          ],
+          additionalImages: [
+            { src: "img/NLT_Logo.png", alt: "Additional Icon 1" },
+            { src: "img/logo_green.png", alt: "Additional Icon 2" },
+          ],
+        },
+        {
+          id: "maintenance-1",
+          title: "Maintenance",
+          stepsTitle: "Creating Equipment Categories:",
+          image: "img/maintenance/ma1.png",
+          imageAlt: "Screenshot of Maintenance module",
+          steps: [
+            { text: "Go to Service Request.", type: "ordered" },
+            { text: "Click on Equipment Categories.", type: "ordered" },
+            { text: "Click on New Equipment Category.", type: "ordered" },
+          ],
+          additionalImages: [
+            { src: "img/NLT_Logo.png", alt: "Additional Icon 1" },
+            { src: "img/logo_green.png", alt: "Additional Icon 2" },
+          ],
+        },
+        {
+          id: "maintenance-2",
+          title: "Maintenance",
+          stepsTitle: "Creating Equipment Categories:",
+          image: "img/maintenance/ma2.png",
+          imageAlt: "Screenshot of Maintenance module",
+          steps: [
+            { text: "Type the name of category.", type: "ordered" },
+            { text: "Type code prefix.", type: "ordered" },
+            { text: "Type description.", type: "ordered" },
+            { text: "Click create.", type: "ordered" },
+          ],
+          additionalImages: [
+            { src: "img/NLT_Logo.png", alt: "Additional Icon 1" },
+            { src: "img/logo_green.png", alt: "Additional Icon 2" },
+          ],
+        },
+        {
+          id: "maintenance-3",
+          title: "Maintenance",
+          stepsTitle: "Creating Equipment Type:",
+          image: "img/maintenance/ma3.png",
+          imageAlt: "Screenshot of Maintenance module",
+          steps: [
+            { text: "Go to Service Request.", type: "ordered" },
+            { text: "Go to Equipment Types.", type: "ordered" },
+            { text: "Click on New Equipment Type.", type: "ordered" },
+          ],
+          additionalImages: [
+            { src: "img/NLT_Logo.png", alt: "Additional Icon 1" },
+            { src: "img/logo_green.png", alt: "Additional Icon 2" },
+          ],
+        },
+        {
+          id: "maintenance-4",
+          title: "Maintenance",
+          stepsTitle: "Creating Equipment Type:",
+          image: "img/maintenance/ma4.png",
+          imageAlt: "Screenshot of Maintenance module",
+          steps: [
+            { text: "Type name of the type.", type: "ordered" },
+            { text: "Type the code.", type: "ordered" },
+            { text: "Select the category.", type: "ordered" },
+            { text: "Type description.", type: "ordered" },
+            { text: "Click Create.", type: "ordered" },
+          ],
+          additionalImages: [
+            { src: "img/NLT_Logo.png", alt: "Additional Icon 1" },
+            { src: "img/logo_green.png", alt: "Additional Icon 2" },
+          ],
+        },
+        {
+          id: "maintenance-5",
+          title: "Maintenance",
+          stepsTitle: "Creating an Equipment:",
+          image: "img/maintenance/ma5.png",
+          imageAlt: "Screenshot of Maintenance module",
+          steps: [
+            { text: "Go to service Request.", type: "ordered" },
+            { text: "Go to Equipment.", type: "ordered" },
+            { text: "Click on New Equipment.", type: "ordered" },
+          ],
+          additionalImages: [
+            { src: "img/NLT_Logo.png", alt: "Additional Icon 1" },
+            { src: "img/logo_green.png", alt: "Additional Icon 2" },
+          ],
+        },
+        {
+          id: "maintenance-6",
+          title: "Maintenance",
+          stepsTitle: "Creating an Equipment:",
+          image: "img/maintenance/ma6.png",
+          imageAlt: "Screenshot of Maintenance module",
+          steps: [
+            { text: "Type the name of equipment.", type: "ordered" },
+            { text: "Select the status.", type: "ordered" },
+            { text: "Select the equipment type.", type: "ordered" },
+            {
+              text: "Assets Tag will be created automatically.",
+              type: "ordered",
+            },
+            { text: "Select the branch & branch area.", type: "ordered" },
+            { text: "Type the other info, then click next.", type: "ordered" },
+          ],
+          additionalImages: [
+            { src: "img/NLT_Logo.png", alt: "Additional Icon 1" },
+            { src: "img/logo_green.png", alt: "Additional Icon 2" },
+          ],
+        },
+        {
+          id: "maintenance-7",
+          title: "Maintenance",
+          stepsTitle: "Creating an Equipment:",
+          image: "img/maintenance/ma7.png",
+          imageAlt: "Screenshot of Maintenance module",
+          steps: [
+            { text: "Type the Warranty period.", type: "ordered" },
+            {
+              text: "Specify the periodic maintenance interval.",
+              type: "ordered",
+            },
+            { text: "Specify the purchase data.", type: "ordered" },
+            {
+              text: "Specify the startup data.",
+              type: "ordered",
+            },
+            { text: "Click Next.", type: "ordered" },
+          ],
+          additionalImages: [
+            { src: "img/NLT_Logo.png", alt: "Additional Icon 1" },
+            { src: "img/logo_green.png", alt: "Additional Icon 2" },
+          ],
+        },
+        {
+          id: "maintenance-8",
+          title: "Maintenance",
+          stepsTitle: "Creating an Equipment:",
+          image: "img/maintenance/ma8.png",
+          imageAlt: "Screenshot of Maintenance module",
+          steps: [
+            { text: "Add photos for the equipment.", type: "ordered" },
+            {
+              text: "Click Create.",
+              type: "ordered",
+            },
+            { text: "Now, it will be added successfully.", type: "text" },
+          ],
+          additionalImages: [
+            { src: "img/NLT_Logo.png", alt: "Additional Icon 1" },
+            { src: "img/logo_green.png", alt: "Additional Icon 2" },
+          ],
+        },
+        {
+          id: "maintenance-9",
+          title: "Maintenance",
+          stepsTitle: "Creating a Service Request:",
+          image: "img/maintenance/ma9.png",
+          imageAlt: "Screenshot of Maintenance module",
+          steps: [
+            { text: "Go to Service Request.", type: "ordered" },
+            {
+              text: "Click on Service Request.",
+              type: "ordered",
+            },
+            { text: "Click on New Service Request.", type: "ordered" },
+          ],
+          additionalImages: [
+            { src: "img/NLT_Logo.png", alt: "Additional Icon 1" },
+            { src: "img/logo_green.png", alt: "Additional Icon 2" },
+          ],
+        },
+        {
+          id: "maintenance-10",
+          title: "Maintenance",
+          stepsTitle: "Creating a Service Request:",
+          image: "img/maintenance/ma10.png",
+          imageAlt: "Screenshot of Maintenance module",
+          steps: [
+            { text: "Select branch & branch area.", type: "ordered" },
+            {
+              text: "Select equipment.",
+              type: "ordered",
+            },
+            { text: "Type description.", type: "ordered" },
+            { text: "Select the staff.", type: "ordered" },
+            { text: "Select the urgency & impact.", type: "ordered" },
+            { text: "Click Next to add pictures.", type: "ordered" },
+            { text: "Click Create.", type: "ordered" },
+          ],
+          additionalImages: [
+            { src: "img/NLT_Logo.png", alt: "Additional Icon 1" },
+            { src: "img/logo_green.png", alt: "Additional Icon 2" },
+          ],
+        },
+        {
+          id: "maintenance-11",
+          title: "Maintenance",
+          stepsTitle: "Creating a Service Request:",
+          image: "img/maintenance/ma11.png",
+          imageAlt: "Screenshot of Maintenance module",
+          steps: [
+            {
+              text: "The request is now ready and has been sent to the staff account.",
+              type: "text",
+            },
+            {
+              text: "They can view it, and you can also follow up on the progress.",
+              type: "text",
+            },
+          ],
+          additionalImages: [
+            { src: "img/NLT_Logo.png", alt: "Additional Icon 1" },
+            { src: "img/logo_green.png", alt: "Additional Icon 2" },
+          ],
+        },
+        {
+          id: "task-1",
+          title: "Task Management",
+          stepsTitle: "Create a One-Time Task:",
+          image: "img/task/1.png",
+          imageAlt: "Screenshot of Maintenance module",
+          steps: [
+            {
+              text: "Go task management.",
+              type: "ordered",
+            },
+            {
+              text: "Click New Task.",
+              type: "ordered",
+            },
+          ],
+          additionalImages: [
+            { src: "img/NLT_Logo.png", alt: "Additional Icon 1" },
+            { src: "img/logo_green.png", alt: "Additional Icon 2" },
+          ],
+        },
+        {
+          id: "task-2",
+          title: "Task Management",
+          stepsTitle: "Create a One-Time Task:",
+          image: "img/task/2.png",
+          imageAlt: "Screenshot of Maintenance module",
+          steps: [
+            {
+              text: "Type the title of the task.",
+              type: "ordered",
+            },
+            {
+              text: "Select the role if you want to send it to all role staff.",
+              type: "ordered",
+            },
+            {
+              text: "Control the staff you want to send to..",
+              type: "ordered",
+            },
+            {
+              text: "Type description(not required).",
+              type: "ordered",
+            },
+            {
+              text: "Select the deadline of it.",
+              type: "ordered",
+            },
+          ],
+          additionalImages: [
+            { src: "img/NLT_Logo.png", alt: "Additional Icon 1" },
+            { src: "img/logo_green.png", alt: "Additional Icon 2" },
+          ],
+        },
+        {
+          id: "task-3",
+          title: "Task Management",
+          stepsTitle: "Create a One-Time Task:",
+          image: "img/task/3.png",
+          imageAlt: "Screenshot of Maintenance module",
+          steps: [
+            {
+              text: "Type the steps of the task.",
+              type: "ordered",
+            },
+            {
+              text: "You can add more steps.",
+              type: "ordered",
+            },
+            {
+              text: "Click Create.",
+              type: "ordered",
+            },
+          ],
+          additionalImages: [
+            { src: "img/NLT_Logo.png", alt: "Additional Icon 1" },
+            { src: "img/logo_green.png", alt: "Additional Icon 2" },
+          ],
+        },
+        {
+          id: "task-4",
+          title: "Task Management",
+          stepsTitle: "Create a One-Time Task:",
+          image: "img/task/4.png",
+          imageAlt: "Screenshot of Maintenance module",
+          steps: [
+            {
+              text: "The task is now ready and has been sent to the staff account.",
+              type: "text",
+            },
+            {
+              text: "They can view it, and you can also follow up on the progress.",
+              type: "text",
+            },
+          ],
+          additionalImages: [
+            { src: "img/NLT_Logo.png", alt: "Additional Icon 1" },
+            { src: "img/logo_green.png", alt: "Additional Icon 2" },
+          ],
+        },
+        {
+          id: "task-5",
+          title: "Task Management",
+          stepsTitle: "Create a Schedule Task:",
+          image: "img/task/5.png",
+          imageAlt: "Screenshot of Maintenance module",
+          steps: [
+            {
+              text: "Go to task management.",
+              type: "ordered",
+            },
+            {
+              text: "Go to Schedule Task Setup.",
+              type: "ordered",
+            },
+            {
+              text: "Click on New Schedule Task.",
+              type: "ordered",
+            },
+          ],
+          additionalImages: [
+            { src: "img/NLT_Logo.png", alt: "Additional Icon 1" },
+            { src: "img/logo_green.png", alt: "Additional Icon 2" },
+          ],
+        },
+        {
+          id: "task-6",
+          title: "Task Management",
+          stepsTitle: "Create a Schedule Task:",
+          image: "img/task/6.png",
+          imageAlt: "Screenshot of Maintenance module",
+          steps: [
+            {
+              text: "Type the title of the task. ",
+              type: "ordered",
+            },
+            {
+              text: "Choose the staff you want to send to.",
+              type: "ordered",
+            },
+            {
+              text: "Select the type of the task.",
+              type: "ordered",
+            },
+            {
+              text: "Select start & end date. ",
+              type: "ordered",
+            },
+            {
+              text: "Type the recur of the task ,(for example , evvery 2 weeks send one).",
+              type: "ordered",
+            },
+            {
+              text: "Select the days of the task.(Note: you can choose multiple days).",
+              type: "ordered",
+            },
+          ],
+          additionalImages: [
+            { src: "img/NLT_Logo.png", alt: "Additional Icon 1" },
+            { src: "img/logo_green.png", alt: "Additional Icon 2" },
+          ],
+        },
+        {
+          id: "task-7",
+          title: "Task Management",
+          stepsTitle: "Create a Schedule Task:",
+          image: "img/task/7.png",
+          imageAlt: "Screenshot of Maintenance module",
+          steps: [
+            {
+              text: "Type description of the task.",
+              type: "ordered",
+            },
+            {
+              text: "Type the steps of the task.",
+              type: "ordered",
+            },
+            {
+              text: "you can add more steps.",
+              type: "ordered",
+            },
+            {
+              text: "Click Create.",
+              type: "ordered",
+            },
+          ],
+          additionalImages: [
+            { src: "img/NLT_Logo.png", alt: "Additional Icon 1" },
+            { src: "img/logo_green.png", alt: "Additional Icon 2" },
+          ],
+        },
+        {
+          id: "task-8",
+          title: "Task Management",
+          stepsTitle: "Create a Schedule Task:",
+          image: "img/task/8.png",
+          imageAlt: "Screenshot of Maintenance module",
+          steps: [
+            {
+              text: "The schedule task is now ready and will be automatically send to the selected staff at the specified date and time.",
+              type: "text",
+            },
+          ],
+          additionalImages: [
+            { src: "img/NLT_Logo.png", alt: "Additional Icon 1" },
+            { src: "img/logo_green.png", alt: "Additional Icon 2" },
+          ],
+        },
+        {
+          id: "nltapp-1",
+          title: "NLT App",
+          stepsTitle: "Tenant Name:",
+          image: "img/app/1.png",
+          imageAlt: "Screenshot of Maintenance module",
+          steps: [
+            {
+              text: "Enter your tenant name.",
+              type: "text",
+            },
+            {
+              text: "then click save and continue",
+              type: "text",
+            },
+          ],
+          additionalImages: [
+            { src: "img/NLT_Logo.png", alt: "Additional Icon 1" },
+            { src: "img/logo_green.png", alt: "Additional Icon 2" },
+          ],
+        },
+        {
+          id: "nltapp-2",
+          title: "NLT App",
+          stepsTitle: "Manager User:",
+          image: "img/app/2.png",
+          imageAlt: "Screenshot of Maintenance module",
+          steps: [
+            {
+              text: "Log in by a branch manager user.",
+              type: "text",
+            },
+          ],
+          additionalImages: [
+            { src: "img/NLT_Logo.png", alt: "Additional Icon 1" },
+            { src: "img/logo_green.png", alt: "Additional Icon 2" },
+          ],
+        },
+        {
+          id: "nltapp-3",
+          title: "NLT App",
+          stepsTitle: "Add Products:",
+          image: "img/app/3.png",
+          imageAlt: "Screenshot of Maintenance module",
+          steps: [
+            {
+              text: "Add products to the cart, and click on cart icon in the top of left.",
+              type: "text",
+            },
+          ],
+          additionalImages: [
+            { src: "img/NLT_Logo.png", alt: "Additional Icon 1" },
+            { src: "img/logo_green.png", alt: "Additional Icon 2" },
+          ],
+        },
+        {
+          id: "nltapp-4",
+          title: "NLT App",
+          stepsTitle: "Edit Quantities:",
+          image: "img/app/4.png",
+          imageAlt: "Screenshot of Maintenance module",
+          steps: [
+            {
+              text: "You can edit quantities befor sending the cart by clicking on qty number.",
+              type: "text",
+            },
+          ],
+          additionalImages: [
+            { src: "img/NLT_Logo.png", alt: "Additional Icon 1" },
+            { src: "img/logo_green.png", alt: "Additional Icon 2" },
+          ],
+        },
+        {
+          id: "nltapp-5",
+          title: "NLT App",
+          stepsTitle: "Remove Products:",
+          image: "img/app/5.png",
+          imageAlt: "Screenshot of Maintenance module",
+          steps: [
+            {
+              text: "You can remove products from the cart by sweeping it to the right.",
+              type: "text",
+            },
+            {
+              text: "You can also add by clicking on + buttom.",
+              type: "text",
+            },
+          ],
+          additionalImages: [
+            { src: "img/NLT_Logo.png", alt: "Additional Icon 1" },
+            { src: "img/logo_green.png", alt: "Additional Icon 2" },
+          ],
+        },
+        {
+          id: "nltapp-6",
+          title: "NLT App",
+          stepsTitle: "Send Order:",
+          image: "img/app/6.png",
+          imageAlt: "Screenshot of Maintenance module",
+          steps: [
+            {
+              text: "Click on send then submit.",
+              type: "text",
+            },
+          ],
+          additionalImages: [
+            { src: "img/NLT_Logo.png", alt: "Additional Icon 1" },
+            { src: "img/logo_green.png", alt: "Additional Icon 2" },
+          ],
+        },
+        {
+          id: "nltapp-7",
+          title: "NLT App",
+          stepsTitle: "Receive your Order:",
+          image: "img/app/7.png",
+          imageAlt: "Screenshot of Maintenance module",
+          steps: [
+            {
+              text: "After receiving the order, you can change the status to Ready fo Deleivery by clicking on Refresh button.",
+              type: "text",
+            },
+          ],
+          additionalImages: [
+            { src: "img/NLT_Logo.png", alt: "Additional Icon 1" },
+            { src: "img/logo_green.png", alt: "Additional Icon 2" },
+          ],
+        },
+      ];
+
+      // Function to generate sections dynamically
+      function generateSections() {
+        const main = document.getElementById("main-content");
+        sectionsData.forEach((section) => {
+          if (section.type === "simple") {
+            // Simple section (e.g., Home)
+            main.innerHTML += `
+              <section id="${section.id}">
+                <h2>${section.title}</h2>
+                <p>${section.content}</p>
+              </section>
+            `;
+          } else {
+            // Detailed section with image and steps
+            let stepsHtml = "<ol>";
+            section.steps.forEach((step) => {
+              if (step.type === "ordered") {
+                stepsHtml += `<li>${step.text}</li>`;
+              } else {
+                stepsHtml += `</ol><p>${step.text}</p><ol>`;
+              }
+            });
+            stepsHtml += "</ol>";
+            const additionalImagesHtml = section.additionalImages
+              .map((img) => `<img src="${img.src}" alt="${img.alt}" />`)
+              .join("");
+            main.innerHTML += `
+              <section id="${section.id}">
+                <h2>${section.title}</h2>
+                <div class="module-content">
+                  <img class="module-img" src="${section.image}" alt="${section.imageAlt}" />
+                  <div class="steps-container">
+                    <h3 class="steps-title">${section.stepsTitle}</h3>
+                    ${stepsHtml}
+                  </div>
+                </div>
+                <div class="additional-images">
+                  ${additionalImagesHtml}
+                </div>
+              </section>
+            `;
+          }
+        });
+      }
+
+      // Function to toggle language
+      function toggleLanguage() {
+        const currentLang = document.body.getAttribute("lang");
+        const newLang = currentLang === "en" ? "ar" : "en";
+        switchLanguage(newLang);
+      }
+
+      // Function to switch language
+      function switchLanguage(lang) {
+        document.body.setAttribute("lang", lang);
+        const toggleButton = document.getElementById("language-toggle");
+        toggleButton.textContent =
+          translations[lang]["language-toggle"] || "English";
+      }
+
+      // Function to toggle sidebar
+      function toggleSidebar() {
+        const sidebar = document.getElementById("sidebar");
+        const overlay = document.getElementById("overlay");
+        sidebar.classList.toggle("open");
+        overlay.classList.toggle("active");
+      }
+
+      // Initialize
+      generateSections(); // Generate sections dynamically
+      switchLanguage("en"); // Initialize with English
+
+      // Open/close animation for sections with single open section logic
+      document.querySelectorAll("section:not(#home) h2").forEach((header) => {
+        header.addEventListener("click", () => {
+          const content = header.nextElementSibling; // module-content
+          const additionalImages = content.nextElementSibling; // additional-images
+
+          // Close all other sections
+          document
+            .querySelectorAll("section:not(#home) .module-content")
+            .forEach((otherContent) => {
+              otherContent.classList.remove("open");
+            });
+          document
+            .querySelectorAll("section:not(#home) .additional-images")
+            .forEach((otherImages) => {
+              otherImages.classList.remove("open");
+            });
+          document
+            .querySelectorAll("section:not(#home) h2")
+            .forEach((otherHeader) => {
+              otherHeader.classList.remove("open");
+            });
+
+          // Open the clicked section
+          if (content.classList.contains("open")) {
+            content.classList.remove("open");
+            additionalImages.classList.remove("open");
+            header.classList.remove("open");
+          } else {
+            content.classList.add("open");
+            additionalImages.classList.add("open");
+            header.classList.add("open");
+          }
+        });
+      });
+
+      // Initially hide content and additional images for sections (except home)
+      document
+        .querySelectorAll("section:not(#home) .module-content")
+        .forEach((content) => {
+          content.classList.remove("open");
+        });
+      document
+        .querySelectorAll("section:not(#home) .additional-images")
+        .forEach((images) => {
+          images.classList.remove("open");
+        });
+    </script>
+  </body>
+</html>
