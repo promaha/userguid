@@ -1536,11 +1536,12 @@
       generateSections(); // Generate sections dynamically
       switchLanguage("en"); // Initialize with English
 
-      // Open/close animation for sections with single open section logic
+      // Open/close animation for sections with toggle logic
       document.querySelectorAll("section:not(#home) h2").forEach((header) => {
         header.addEventListener("click", () => {
           const content = header.nextElementSibling; // module-content
           const additionalImages = content.nextElementSibling; // additional-images
+          const isOpen = content.classList.contains("open");
 
           // Close all other sections
           document
@@ -1559,12 +1560,8 @@
               otherHeader.classList.remove("open");
             });
 
-          // Open the clicked section
-          if (content.classList.contains("open")) {
-            content.classList.remove("open");
-            additionalImages.classList.remove("open");
-            header.classList.remove("open");
-          } else {
+          // Toggle the clicked section
+          if (!isOpen) {
             content.classList.add("open");
             additionalImages.classList.add("open");
             header.classList.add("open");
