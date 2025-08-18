@@ -1555,33 +1555,37 @@
       document.querySelectorAll("section:not(#home) h2").forEach((header) => {
         header.addEventListener("click", () => {
           const categoryContent = header.nextElementSibling; // .category-content
-          const isOpen = categoryContent.classList.contains("open");
+          const isOpening = !categoryContent.classList.contains("open");
 
-          // Close all other sections
-          document
-            .querySelectorAll("section:not(#home) .category-content")
-            .forEach((content) => {
-              if (content !== categoryContent) {
-                content.classList.remove("open");
-                content.parentElement
-                  .querySelector("h2")
-                  .classList.remove("open");
-              }
-            });
+          // ابحث عن أي قسم مفتوح حاليًا
+          const openSection = document.querySelector(".category-content.open");
 
-          // Toggle the clicked section
-          categoryContent.classList.toggle("open");
-          header.classList.toggle("open");
+          // إذا كان هناك قسم مفتوح، قم بإغلاقه أولاً
+          if (openSection) {
+            openSection.classList.remove("open");
+            openSection.parentElement
+              .querySelector("h2")
+              .classList.remove("open");
+          }
 
-          // If now open, scroll to the top of the section with a slight delay
-          if (categoryContent.classList.contains("open")) {
-            setTimeout(() => {
-              header.scrollIntoView({ behavior: "smooth", block: "start" });
-            }, 300); // تأخير 300 ميلي ثانية (يمكن تعديله إلى 100-500 حسب سرعة الجهاز)
+          // إذا كان المستخدم يفتح قسمًا جديدًا (وليس فقط يغلق القسم الحالي)
+          if (isOpening) {
+            // ننتظر انتهاء حركة الإغلاق (500ms)
+            setTimeout(
+              () => {
+                // خطوة 3: ننقل الشاشة فوراً (بدون حركة سلسة) إلى بداية القسم الجديد
+                // هذا يمنع القفزة عن طريق وضع الشاشة في المكان الصحيح أولاً
+                header.scrollIntoView({ behavior: "auto", block: "start" });
+
+                // خطوة 4: الآن فقط، نبدأ حركة الفتح السلسة
+                categoryContent.classList.add("open");
+                header.classList.add("open");
+              },
+              openSection ? 500 : 0
+            ); // ننتظر فقط إذا كان هناك قسم يتم إغلاقه
           }
         });
       });
-      // No toggle for sub-sections, as they are always open when category is open
     </script>
   </body>
 </html>
