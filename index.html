@@ -306,44 +306,17 @@
       #home {
         animation-delay: 0.2s;
       }
-      #hr-1 {
+      #human-resource {
         animation-delay: 0.4s;
       }
-      #hr-2 {
+      #maintenance {
         animation-delay: 0.6s;
       }
-      #hr-3 {
+      #task-management {
         animation-delay: 0.8s;
       }
-      #hr-4 {
+      #nlt-app {
         animation-delay: 1s;
-      }
-      #hr-5 {
-        animation-delay: 1.2s;
-      }
-      #hr-6 {
-        animation-delay: 1.4s;
-      }
-      #hr-7 {
-        animation-delay: 1.6s;
-      }
-      #hr-8 {
-        animation-delay: 1.8s;
-      }
-      #hr-9 {
-        animation-delay: 2s;
-      }
-      #hr-10 {
-        animation-delay: 2.2s;
-      }
-      #hr-11 {
-        animation-delay: 2.4s;
-      }
-      #maintenance-1 {
-        animation-delay: 2.6s;
-      }
-      #maintenance-2 {
-        animation-delay: 2.8s;
       }
 
       section h2 {
@@ -389,20 +362,26 @@
         text-align: right; /* Align right for Arabic */
       }
 
+      /* Sub-section container for organized grouping */
+      .sub-section {
+        margin-bottom: 2rem;
+        padding: 1.5rem;
+        background-color: #f5f5f5; /* Light background for distinction */
+        border-radius: 6px;
+        box-shadow: 0 2px 4px var(--shadow-color);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .sub-section:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 4px 8px var(--shadow-color);
+      }
+
       /* Module content layout: image left, steps right */
       .module-content {
         display: flex;
         gap: 2rem;
         align-items: flex-start;
-        max-height: 0;
-        overflow: hidden;
-        transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out; /* Smooth animation */
-        opacity: 0;
-      }
-
-      .module-content.open {
-        max-height: 2000px; /* Large enough to accommodate content */
-        opacity: 1;
       }
 
       /* Additional images - moved to the right */
@@ -411,20 +390,11 @@
         gap: 1rem;
         margin-top: 1.5rem;
         justify-content: flex-end; /* Align to the right */
-        max-height: 0;
-        overflow: hidden;
-        transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out; /* Smooth animation */
-        opacity: 0;
       }
 
       body[lang="ar"] .additional-images {
         justify-content: flex-start; /* Align to the left for Arabic */
         flex-direction: row-reverse; /* Ensure left alignment with RTL */
-      }
-
-      .additional-images.open {
-        max-height: 200px; /* Adjust based on content */
-        opacity: 1;
       }
 
       /* Image styles - controlled size with max dimensions */
@@ -614,6 +584,19 @@
           margin: 0; /* Remove margin for mobile */
         }
       }
+
+      /* Category content styles for collapsible */
+      .category-content {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
+        opacity: 0;
+      }
+
+      .category-content.open {
+        max-height: 10000px; /* Large enough */
+        opacity: 1;
+      }
     </style>
   </head>
   <body lang="en">
@@ -630,10 +613,10 @@
         <nav>
           <ul>
             <li><a href="#home">Home</a></li>
-            <li><a href="#hr-1">Human Resource</a></li>
-            <li><a href="#maintenance-1">Maintenance</a></li>
-            <li><a href="#task-1">Task Management</a></li>
-            <li><a href="#nltapp-1">NLT App</a></li>
+            <li><a href="#human-resource">Human Resource</a></li>
+            <li><a href="#maintenance">Maintenance</a></li>
+            <li><a href="#task-management">Task Management</a></li>
+            <li><a href="#nlt-app">NLT App</a></li>
           </ul>
         </nav>
         <!-- Single language switcher button -->
@@ -650,15 +633,19 @@
       <button class="close-sidebar" onclick="toggleSidebar()">✕</button>
       <ul>
         <li><a href="#home" onclick="toggleSidebar()">Home</a></li>
-        <li><a href="#hr-1" onclick="toggleSidebar()">Human Resource</a></li>
         <li>
-          <a href="#maintenance-1" onclick="toggleSidebar()">Maintenance</a>
+          <a href="#human-resource" onclick="toggleSidebar()">Human Resource</a>
         </li>
         <li>
-          <a href="#task-1" onclick="toggleSidebar()">Task Management</a>
+          <a href="#maintenance" onclick="toggleSidebar()">Maintenance</a>
         </li>
         <li>
-          <a href="#nltapp-1" onclick="toggleSidebar()">NLT App</a>
+          <a href="#task-management" onclick="toggleSidebar()"
+            >Task Management</a
+          >
+        </li>
+        <li>
+          <a href="#nlt-app" onclick="toggleSidebar()">NLT App</a>
         </li>
       </ul>
     </div>
@@ -1464,22 +1451,46 @@
         },
       ];
 
-      // Function to generate sections dynamically
+      // Function to generate sections dynamically with grouping
       function generateSections() {
         const main = document.getElementById("main-content");
-        sectionsData.forEach((section) => {
-          if (section.type === "simple") {
-            // Simple section (e.g., Home)
-            main.innerHTML += `
-              <section id="${section.id}">
-                <h2>${section.title}</h2>
-                <p>${section.content}</p>
-              </section>
-            `;
-          } else {
-            // Detailed section with image and steps
+
+        // Group sections by category
+        const groupedSections = {
+          home: sectionsData.filter((s) => s.id === "home"),
+          humanResource: sectionsData.filter((s) => s.id.startsWith("hr-")),
+          maintenance: sectionsData.filter((s) =>
+            s.id.startsWith("maintenance-")
+          ),
+          taskManagement: sectionsData.filter((s) => s.id.startsWith("task-")),
+          nltApp: sectionsData.filter((s) => s.id.startsWith("nltapp-")),
+        };
+
+        // Generate Home section (simple)
+        if (groupedSections.home.length > 0) {
+          const homeSection = groupedSections.home[0];
+          main.innerHTML += `
+            <section id="home">
+              <h2>${homeSection.title}</h2>
+              <p>${homeSection.content}</p>
+            </section>
+          `;
+        }
+
+        // Generate grouped sections for other categories
+        Object.entries(groupedSections).forEach(([category, subs]) => {
+          if (category === "home" || subs.length === 0) return;
+
+          let categoryId = category.replace(/([A-Z])/g, "-$1").toLowerCase(); // e.g., humanResource -> human-resource
+          let categoryTitle = subs[0].title; // Use title from first sub-section
+
+          let categoryHtml = `<section id="${categoryId}">
+            <h2>${categoryTitle}</h2>
+            <div class="category-content">`; // Wrapper for sub-sections
+
+          subs.forEach((sub, index) => {
             let stepsHtml = "<ol>";
-            section.steps.forEach((step) => {
+            sub.steps.forEach((step) => {
               if (step.type === "ordered") {
                 stepsHtml += `<li>${step.text}</li>`;
               } else {
@@ -1487,25 +1498,29 @@
               }
             });
             stepsHtml += "</ol>";
-            const additionalImagesHtml = section.additionalImages
+
+            const additionalImagesHtml = sub.additionalImages
               .map((img) => `<img src="${img.src}" alt="${img.alt}" />`)
               .join("");
-            main.innerHTML += `
-              <section id="${section.id}">
-                <h2>${section.title}</h2>
-                <div class="module-content">
-                  <img class="module-img" src="${section.image}" alt="${section.imageAlt}" />
+
+            categoryHtml += `
+              <div class="sub-section">
+                <h3 class="steps-title">${sub.stepsTitle}</h3>
+                <div class="module-content open">
+                  <img class="module-img" src="${sub.image}" alt="${sub.imageAlt}" />
                   <div class="steps-container">
-                    <h3 class="steps-title">${section.stepsTitle}</h3>
                     ${stepsHtml}
                   </div>
                 </div>
-                <div class="additional-images">
+                <div class="additional-images open">
                   ${additionalImagesHtml}
                 </div>
-              </section>
+              </div>
             `;
-          }
+          });
+
+          categoryHtml += `</div></section>`;
+          main.innerHTML += categoryHtml;
         });
       }
 
@@ -1536,50 +1551,36 @@
       generateSections(); // Generate sections dynamically
       switchLanguage("en"); // Initialize with English
 
-      // Open/close animation for sections with toggle logic
+      // Open/close animation for main sections (h2)
       document.querySelectorAll("section:not(#home) h2").forEach((header) => {
         header.addEventListener("click", () => {
-          const content = header.nextElementSibling; // module-content
-          const additionalImages = content.nextElementSibling; // additional-images
-          const isOpen = content.classList.contains("open");
+          const categoryContent = header.nextElementSibling; // .category-content
+          const isOpen = categoryContent.classList.contains("open");
 
           // Close all other sections
           document
-            .querySelectorAll("section:not(#home) .module-content")
-            .forEach((otherContent) => {
-              otherContent.classList.remove("open");
-            });
-          document
-            .querySelectorAll("section:not(#home) .additional-images")
-            .forEach((otherImages) => {
-              otherImages.classList.remove("open");
-            });
-          document
-            .querySelectorAll("section:not(#home) h2")
-            .forEach((otherHeader) => {
-              otherHeader.classList.remove("open");
+            .querySelectorAll("section:not(#home) .category-content")
+            .forEach((content) => {
+              if (content !== categoryContent) {
+                content.classList.remove("open");
+                content.parentElement
+                  .querySelector("h2")
+                  .classList.remove("open");
+              }
             });
 
           // Toggle the clicked section
-          if (!isOpen) {
-            content.classList.add("open");
-            additionalImages.classList.add("open");
-            header.classList.add("open");
+          categoryContent.classList.toggle("open");
+          header.classList.toggle("open");
+
+          // If now open, scroll to the top of the section
+          if (categoryContent.classList.contains("open")) {
+            header.scrollIntoView({ behavior: "smooth", block: "start" });
           }
         });
       });
 
-      // Initially hide content and additional images for sections (except home)
-      document
-        .querySelectorAll("section:not(#home) .module-content")
-        .forEach((content) => {
-          content.classList.remove("open");
-        });
-      document
-        .querySelectorAll("section:not(#home) .additional-images")
-        .forEach((images) => {
-          images.classList.remove("open");
-        });
+      // No toggle for sub-sections, as they are always open when category is open
     </script>
   </body>
 </html>
