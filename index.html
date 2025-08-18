@@ -1573,13 +1573,14 @@
           categoryContent.classList.toggle("open");
           header.classList.toggle("open");
 
-          // If now open, scroll to the top of the section
+          // If now open, scroll to the top of the section with a slight delay
           if (categoryContent.classList.contains("open")) {
-            header.scrollIntoView({ behavior: "smooth", block: "start" });
+            setTimeout(() => {
+              header.scrollIntoView({ behavior: "smooth", block: "start" });
+            }, 300); // تأخير 300 ميلي ثانية (يمكن تعديله إلى 100-500 حسب سرعة الجهاز)
           }
         });
       });
-
       // No toggle for sub-sections, as they are always open when category is open
     </script>
   </body>
